@@ -1,0 +1,36 @@
+name: proto
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on:
+      - self-hosted
+      - generic-linux
+    strategy:
+      matrix:
+        app: [a, b, c]
+
+    outputs:
+      deploy-url-a: ${{ steps.deploy-url.outputs.a }}
+      deploy-url-b: ${{ steps.deploy-url.outputs.b }}
+      deploy-url-c: ${{ steps.deploy-url.outputs.c }}
+
+    steps:
+      - id: deploy-url
+        run: echo '::set-output name=${{ matrix.app }}::test${{ matrix.app }}'
+
+  e2e:
+    runs-on:
+      - self-hosted
+      - generic-linux
+    needs:
+      - build
+    steps:
+      - env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: echo "$NEEDS"
