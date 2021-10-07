@@ -9,8 +9,7 @@ on:
 jobs:
   build:
     runs-on:
-      - self-hosted
-      - generic-linux
+      - ubuntu-latest
     strategy:
       matrix:
         app: [a, b, c]
@@ -26,8 +25,7 @@ jobs:
 
   e2e:
     runs-on:
-      - self-hosted
-      - generic-linux
+      - ubuntu-latest
     needs:
       - build
     steps:
