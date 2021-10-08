@@ -7,28 +7,9 @@ on:
     branches: [master]
 
 jobs:
-  build:
-    runs-on:
-      - ubuntu-latest
-    strategy:
-      matrix:
-        app: [a, b, c]
-
-    outputs:
-      deploy-url-a: ${{ steps.deploy-url.outputs.a }}
-      deploy-url-b: ${{ steps.deploy-url.outputs.b }}
-      deploy-url-c: ${{ steps.deploy-url.outputs.c }}
-
-    steps:
-      - id: deploy-url
-        run: echo '::set-output name=${{ matrix.app }}::test${{ matrix.app }}'
-
   e2e:
     runs-on:
-      - ubuntu-latest
-    needs:
-      - build
+      - windows-latest
     steps:
-      - env:
-          NEEDS: ${{ toJSON(needs) }}
-        run: echo "$NEEDS"
+      - run: powershell "$env:GITHUB_WORKSPACE\Hello.ps1" $env:GITHUB_WORKSPACE
+      - run: powershell "$env:GITHUB_WORKSPACE\.github\workflows\Hello.ps1" $env:GITHUB_WORKSPACE
